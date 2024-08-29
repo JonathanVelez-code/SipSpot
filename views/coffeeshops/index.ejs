@@ -1,0 +1,42 @@
+<% layout('layouts/boilerplate') %>
+    <div id="cluster-map"></div>
+    <div class="container">
+        <h1>Coffee Shops Near Me</h1>
+    <% for (let coffeeshop of coffeeshops) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <% if (coffeeshop.image && coffeeshop.image.length> 0) { %>
+                        <img class="img-fluid" alt="" src="<%= coffeeshop.image[0].url %>">
+                        <% }else {%>
+                            <img class="img-fluid" alt=""
+                                src="https://duncanlock.net/images/posts/better-figures-images-plugin-for-pelican/dummy-200x200.png">
+                            <% } %>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= coffeeshop.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%= coffeeshop.description %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-secondary">
+                                <%= coffeeshop.location %>
+                            </small>
+                        </p>
+                        <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-primary">View <%= coffeeshop.title
+                                %></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    </div>
+            <script>
+                const mapToken = '<%-process.env.MAPBOX_TOKEN %>';
+                const coffeeshops = { features: <%- JSON.stringify(coffeeshops) %>}
+            </script>
+
+            <script src="/javascripts/clusterMap.js"></script>

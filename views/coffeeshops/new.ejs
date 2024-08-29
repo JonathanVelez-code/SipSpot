@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">
+            New Coffee Shop
+        </h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/coffeeshops" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="coffeeshop[title]" id="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Adress/City</label>
+                    <input type="text" name="coffeeshop[location]" id="location" class="form-control" required
+                        placeholder="1210 lake street, Orlando">
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Add Image</label>
+                    <input type="file" name="image" id="image" multiple class="form-control"
+                        accept="image/png, image/jpeg, image/jpg">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price range</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="price" placeholder="price"
+                                name="coffeeshop[price]" required>
+                            <label for="price">0-12</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea type="text" name="coffeeshop[description]" id="description" class="form-control"
+                        required></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Coffee Shop</button>
+                </div>
+            </form>
+            <a href="/coffeeshops">Back</a>
+        </div>
+    </div>
