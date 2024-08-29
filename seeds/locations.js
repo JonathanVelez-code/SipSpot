@@ -32,7 +32,7 @@ module.exports = [
         imageurl: ['https://s3-media0.fl.yelpcdn.com/bphoto/n7vpX1yBrFHI2_1PaB4EsA/o.jpg'],
         pricelow: '5',
         pricehigh: '17',
-        description: 'Foxtail Coffee Co. is dedicated to responsibly sourcing some of the finest coffees from around the world. We, as a company, uphold our ethical and quality standards by making sure our environmentally-friendly farms are paid fair wages, so they may continue to grow exceptional crops.', longitude: -81.379234,
+        description: 'Foxtail Coffee Co. is dedicated to responsibly sourcing some of the finest coffees from around the world. We, as a company, uphold our ethical and quality standards by making sure our environmentally-friendly farms are paid fair wages, so they may continue to grow exceptional crops.',
         longitude: -81.376179,
         latitude: 28.528834
     },
