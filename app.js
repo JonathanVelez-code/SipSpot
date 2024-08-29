@@ -21,7 +21,7 @@ const coffeeshopRoutes = require('./routes/coffeeshops');
 const reviewRoutes = require('./routes/reviews');
 const MongoDBStore = require("connect-mongo");
 
-const dbUrl = 'mongodb://localhost:27017/sipspot';//process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/sipspot';
 
 mongoose.connect(dbUrl);
 
@@ -44,10 +44,11 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }))
 
+const secret = process.env.SECRET || 'provideaysecret';
 
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
-    secret: 'provideaysecret',
+    secret,
     touchAfter: 24 * 60 * 60
 });
 
@@ -58,7 +59,7 @@ store.on("error", function (e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'provideaysecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
