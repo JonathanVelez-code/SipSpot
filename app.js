@@ -19,7 +19,9 @@ const helmet = require('helmet');
 const userRoutes = require('./routes/users');
 const coffeeshopRoutes = require('./routes/coffeeshops');
 const reviewRoutes = require('./routes/reviews');
-const MongoDBStore = require("connect-mongo");
+const cartRoutes = require('./routes/cart');
+const checkoutRoutes = require('./routes/checkout');
+const MongoStore = require('connect-mongo');
 
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/sipspot';
 
@@ -46,7 +48,7 @@ app.use(mongoSanitize({
 
 const secret = process.env.SECRET || 'provideaysecret';
 
-const store = MongoDBStore.create({
+const store = MongoStore.create({
     mongoUrl: dbUrl,
     secret,
     touchAfter: 24 * 60 * 60
@@ -83,6 +85,8 @@ const scriptSrcUrls = [
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
     "https://s3-media0.fl.yelpcdn.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://code.jquery.com/",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -94,6 +98,7 @@ const styleSrcUrls = [
     "https://fonts.googleapis.com/",
     "https://use.fontawesome.com/",
     "https://s3-media0.fl.yelpcdn.com/",
+    "https://cdnjs.cloudflare.com/", // Add this for Font Awesome
 ];
 const connectSrcUrls = [
     "https://api.mapbox.com/",
@@ -102,8 +107,12 @@ const connectSrcUrls = [
     "https://b.tiles.mapbox.com/",
     "https://events.mapbox.com/",
     "https://s3-media0.fl.yelpcdn.com/",
+
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = [
+    "https://cdnjs.cloudflare.com/", // Add this for Font Awesome
+    "https://cdn.jsdelivr.net",       // Add this for Bootstrap Icons
+];
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
@@ -117,12 +126,13 @@ app.use(
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/diyvzxu2z/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://res.cloudinary.com/diyvzxu2z/",
                 "https://images.unsplash.com/",
                 "https://images.pexels.com",
                 "https://s3-media0.fl.yelpcdn.com",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
+            formAction: ["*"],
         },
     })
 );
@@ -145,6 +155,8 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);
 app.use('/coffeeshops', coffeeshopRoutes);
 app.use('/coffeeshops/:id/reviews', reviewRoutes);
+app.use('/cart', cartRoutes);
+app.use('/checkout', checkoutRoutes); //here is line 157
 
 
 app.get('/', (req, res) => {

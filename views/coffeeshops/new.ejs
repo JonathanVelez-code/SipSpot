@@ -1,18 +1,26 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
-        <h1 class="text-center">
-            New Coffee Shop
-        </h1>
+        <div class="col-md-6 offset-md-3">
+            <a href="/coffeeshops" class="btn btn-link">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <div class="text-center">
+            <h1>
+                New Coffee Shop
+            </h1>
+        </div>
         <div class="col-md-6 offset-md-3">
             <form action="/coffeeshops" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" name="coffeeshop[title]" id="title" class="form-control" required>
+                    <input type="text" name="coffeeshop[title]" id="title" class="form-control" required
+                        placeholder="Mike Coffee">
                 </div>
                 <div class="mb-3">
                     <label for="location" class="form-label">Adress/City</label>
                     <input type="text" name="coffeeshop[location]" id="location" class="form-control" required
-                        placeholder="1210 lake street, Orlando">
+                        placeholder="11909 E Colonial Dr, Orlando">
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Add Image</label>
@@ -32,13 +40,62 @@
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea type="text" name="coffeeshop[description]" id="description" class="form-control"
-                        required></textarea>
+                    <textarea type="text" name="coffeeshop[description]" id="description" class="form-control" required
+                        placeholder="A description of your location, the atmosphere, the kind of coffee you provide, and what sets your shop apart."></textarea>
                 </div>
+                <!-- Product Tabs -->
+                <h2 class="text-center">Add Coffee Shop Products</h2>
+                <ul class="nav nav-tabs mb-2" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="product-tab-0" data-bs-toggle="tab"
+                            data-bs-target="#product-0" type="button" role="tab" aria-controls="product-0"
+                            aria-selected="true">Product 1</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="productTabContent">
+                    <div class="tab-pane fade show active" id="product-0" role="tabpanel"
+                        aria-labelledby="product-tab-0">
+                        <!-- Product 1 Form Fields -->
+                        <div class="mb-2">
+                            <label for="" class="form-label">Name</label>
+                            <input type="text" name="products[0][name]" placeholder="Espresso Roast"
+                                class="form-control" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Image</label>
+                            <input type="text" name="products[0][imageUrl]" placeholder="Image URL" class="form-control"
+                                required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" name="products[0][price]" class="form-control" required
+                                    placeholder="14.99">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Weight</label>
+                            <input type="text" name="products[0][weight]" placeholder="Product Weight"
+                                class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Roast Type</label>
+                            <input type="text" name="products[0][roast]" placeholder="Roast" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mb-3">
+                    <button id="addProductTabButton" type="button" class="btn btn-secondary mt-3">Add Another
+                        Product</button>
+                </div>
+                <div class="mb-2">
                     <button class="btn btn-success">Add Coffee Shop</button>
+                    <a href="/coffeeshops" class="btn btn-danger text-end">Cancel</a>
                 </div>
             </form>
-            <a href="/coffeeshops">Back</a>
         </div>
     </div>
+
+    <script src="/javascripts/productInput.js"></script>

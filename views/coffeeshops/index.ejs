@@ -1,42 +1,136 @@
 <% layout('layouts/boilerplate') %>
-    <div id="cluster-map"></div>
+    <div class="mb-4">
+        <div id="cluster-map"></div>
+    </div>
     <div class="container">
-        <h1>Coffee Shops Near Me</h1>
-    <% for (let coffeeshop of coffeeshops) { %>
-        <div class="card mb-3">
-            <div class="row">
-                <div class="col-md-4">
-                    <% if (coffeeshop.image && coffeeshop.image.length> 0) { %>
-                        <img class="img-fluid" alt="" src="<%= coffeeshop.image[0].url %>">
-                        <% }else {%>
-                            <img class="img-fluid" alt=""
-                                src="https://duncanlock.net/images/posts/better-figures-images-plugin-for-pelican/dummy-200x200.png">
-                            <% } %>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= coffeeshop.title %>
-                        </h5>
-                        <p class="card-text">
-                            <%= coffeeshop.description %>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-secondary">
-                                <%= coffeeshop.location %>
-                            </small>
-                        </p>
-                        <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-primary">View <%= coffeeshop.title
-                                %></a>
-                    </div>
+        <div class="mb-4">
+            <h1>Coffee Shops Near Me</h1>
+            <!--search filter-->
+            <p class="d-inline-flex gap-1">
+                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    Filters
+                </a>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <form action="/coffeeshops" method="GET">
+                        <div class="col-sm-5 mb-2">
+                            <label for="location">Location</label>
+                            <input class="form-control" type="text" id="location" name="location"
+                                placeholder="Address or Zipcode" value="<%= query.location %>">
+                        </div>
+                        <div class="mb-2">
+                            <label for="distance">Distance (miles)</label>
+                            <div class="col-sm-5">
+                                <input class="form-check-input" type="radio" name="distance" id="distance25" value="25"
+                                    <%=query.distance==='25' ? 'checked' : '' %>>
+                                <label class="form-check-label" for="distance25">25</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-check-input" type="radio" name="distance" id="distance50" value="50"
+                                    <%=query.distance==='50' ? 'checked' : '' %>>
+                                <label class="form-check-label" for="distance50">50</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-check-input" type="radio" name="distance" id="distance100"
+                                    value="100" <%=query.distance==='100' ? 'checked' : '' %>>
+                                <label class="form-check-label" for="distance100">100</label>
+                            </div>
+                            <div>
+                                <a href="/coffeeshops" id="clear-distance">Clear</a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input class="btn btn-success" type="submit">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <% } %>
-    </div>
-            <script>
-                const mapToken = '<%-process.env.MAPBOX_TOKEN %>';
-                const coffeeshops = { features: <%- JSON.stringify(coffeeshops) %>}
-            </script>
+        <% coffeeshops.forEach(coffeeshop=> { %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <% if (coffeeshop.image && coffeeshop.image.length> 0) { %>
+                            <img class="img-fluid" alt="" src="<%= coffeeshop.image[0].url %>">
+                            <% } else { %>
+                                <img class="img-fluid" alt=""
+                                    src="https://duncanlock.net/images/posts/better-figures-images-plugin-for-pelican/dummy-200x200.png">
+                                <% } %>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= coffeeshop.title %>
+                            </h5>
+                            <p class="card-text">
+                                <%= coffeeshop.description %>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-secondary">
+                                    <%= coffeeshop.location %>
+                                </small>
+                            </p>
+                            <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-primary stretched-link">View <%=
+                                    coffeeshop.title %></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
 
-            <script src="/javascripts/clusterMap.js"></script>
+                <!-- Pagination controls -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <% if (page> 1) { %>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page=<%= page - 1 %>&location=<%= query.location %>&distance=<%= query.distance %>"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+
+                                <% let startPage=Math.max(1, page - 2); let endPage=Math.min(totalPages, page + 1); if
+                                    (endPage - startPage < 3) { startPage=Math.max(1, endPage - 3);
+                                    endPage=Math.min(totalPages, startPage + 3); } %>
+
+                                    <% for (let i=startPage; i <=endPage; i++) { %>
+                                        <li class="page-item <%= page === i ? 'active' : '' %>">
+                                            <a class="page-link"
+                                                href="?page=<%= i %>&location=<%= query.location %>&distance=<%= query.distance %>">
+                                                <%= i %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <% if (page < totalPages) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                        href="?page=<%= page + 1 %>&location=<%= query.location %>&distance=<%= query.distance %>"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                                <% } %>
+                    </ul>
+                </nav>
+
+    </div>
+    <script>
+        const clear = document.getElementById('clear-distance');
+        clear.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('location').value = '';
+            document.querySelector('input[type=radio]:checked').checked = false;
+        });
+    </script>
+
+    <script>
+        const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+        const coffeeshops = { features: <%- JSON.stringify(coffeeshops) %> }
+        console.log(coffeeshops);
+    </script>
+    <script src="/javascripts/clusterMap.js"></script>

@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate') %>
+    <div class="container">
+        <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-link">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h1>
+                    <%= product.name %>
+                </h1>
+                <p>Price: $<%= product.price %>
+                </p>
+                <% if (product.weight) { %>
+                    <p>Weight: <%= product.weight %>
+                    </p>
+                    <% } %>
+                        <% if (product.roast) { %>
+                            <p>Roast: <%= product.roast %>
+                            </p>
+                            <% } %>
+                                <!-- Add to Cart Button -->
+                                <form action="/cart/add" method="POST">
+                                    <input type="hidden" name="productId" value="<%= product._id %>">
+                                    <button type="submit" class="btn btn-primary mt-3">Add to Cart</button>
+                                </form>
+            </div>
+        </div>
+    </div>

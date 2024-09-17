@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Review = require('./review');
+const Product = require('./products');
+const { number } = require('joi');
 const Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const opts = { toJSON: { virtuals: true } };
 
@@ -33,7 +36,11 @@ const CoffeeShopSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Review',
         }
-    ]
+    ],
+    product: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    }]
 }, opts);
 
 CoffeeShopSchema.virtual('properties.popUpMarkup').get(function () {
@@ -51,5 +58,7 @@ CoffeeShopSchema.post('findOneAndDelete', async function (doc) {
         })
     }
 })
+CoffeeShopSchema.plugin(mongoosePaginate);
+CoffeeShopSchema.index({ geometry: '2dsphere' });
 
 module.exports = mongoose.model('CoffeeShop', CoffeeShopSchema);

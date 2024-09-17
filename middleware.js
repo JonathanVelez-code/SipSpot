@@ -2,6 +2,9 @@ const { coffeeshopSchema, reviewSchema } = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 const CoffeeShop = require('./models/coffeeshops');
 const Review = require('./models/review');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: mapBoxToken });
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -52,3 +55,4 @@ module.exports.validateReview = (req, res, next) => {
         next();
     }
 }
+

@@ -3,7 +3,7 @@ const map = new mapboxgl.Map({
     container: 'cluster-map',
     style: 'mapbox://styles/mapbox/outdoors-v12',
     center: [-81.37906, 28.54264],
-    zoom: 10
+    zoom: 6
 });
 
 map.addControl(new mapboxgl.NavigationControl());
@@ -125,4 +125,31 @@ map.on('load', function () {
     map.on('mouseleave', 'clusters', function () {
         map.getCanvas().style.cursor = '';
     });
+});
+
+// Example function to handle a new search
+async function handleLocationSearch(newLocation) {
+    let coordinates;
+    try {
+        coordinates = JSON.parse(newLocation);
+    } catch (err) {
+        const response = await geocoder.forwardGeocode({
+            query: newLocation,
+            limit: 1
+        }).send();
+        coordinates = response.body.features[0].geometry.coordinates;
+    }
+
+    updateMapLocation(coordinates, 12); // Adjust zoom level as needed
+
+    map.getSource('coffeeshops').setData({
+        type: 'FeatureCollection',
+        features: coffeeshops
+    });
+}
+
+// Event listener for the search button
+document.getElementById('search-button').addEventListener('click', async () => {
+    const searchInput = document.getElementById('search-input').value;
+    await handleLocationSearch(searchInput);
 });

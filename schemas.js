@@ -30,6 +30,15 @@ module.exports.coffeeshopSchema = Joi.object({
         location: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML(),
     }).required(),
+    products: Joi.array().items(
+        Joi.object({
+            name: Joi.string().required().escapeHTML(),
+            imageUrl: Joi.string().uri().required().escapeHTML(),
+            price: Joi.string().required().escapeHTML(),
+            weight: Joi.string().optional().escapeHTML(),
+            roast: Joi.string().optional().escapeHTML(),
+        })
+    ).required(),
     deleteImages: Joi.array(),
 });
 

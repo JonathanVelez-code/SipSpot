@@ -5,7 +5,7 @@ const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 const coffeeshops = require('../controllers/coffeeshops');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, validateCoffeeShop, isAuthor } = require('../middleware');
+const { isLoggedIn, validateCoffeeShop, isAuthor, searchAndFilterPosts } = require('../middleware');
 
 router.route('/')
     .get(catchAsync(coffeeshops.index))
@@ -20,6 +20,6 @@ router.route('/:id')
     .delete(catchAsync(coffeeshops.deleteCoffeeShop))
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(coffeeshops.renderEditForm));
-
+router.get('/:id/product/:productId', catchAsync(coffeeshops.renderProducts));
 
 module.exports = router;

@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate') %>
     <link rel="stylesheet" href="/stylesheets/stars.css">
+    <link rel="stylesheet" href="/stylesheets/card.css">
     <div class="row">
         <div class="col-6 offset">
             <div class="card mb-3">
@@ -41,7 +42,7 @@
                 </ul>
                 <% if(currentUser && coffeeshop.author.equals(currentUser._id)) { %>
                     <div class="card-body">
-                        <a href="/coffeeshops/<%= coffeeshop._id %>/Edit" class="card-link btn btn-warning">Edit</a>
+                        <a href="/coffeeshops/<%= coffeeshop._id %>/Edit" class="card-link btn btn-primary">Edit</a>
                         <form class="d-inline" action="/coffeeshops/<%= coffeeshop._id %>?_method=DELETE" method="post">
                             <button class="btn btn-danger">DELETE</button>
                         </form>
@@ -102,10 +103,72 @@
                         </div>
                         <%}%>
         </div>
-    </div>
+        <!-- Product section -->
+        <div class="col-12">
+            <h3>Products</h3>
+            <div class="row">
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <% if (coffeeshop.product.length> 0) { %>
+                            <% coffeeshop.product.forEach((product, index)=> { %>
+                                <% if (index % 3===0) { %>
+                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                        <div class="cards-wrapper d-flex justify-content-around">
+                                            <% } %>
+                                                <div class="card" style="width: 18rem;">
+                                                        <img src="<%= product.imageUrl %>" class="card-img-top"
+                                                            alt="<%= product.name %>">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <%= product.name %>
+                                                        </h5>
+                                                        <p class="card-text">Price: $<%= product.price %>
+                                                        </p>
+                                                        <% if (product.weight) { %>
+                                                            <p class="card-text">Weight: <%= product.weight %>
+                                                            </p>
+                                                            <% } %>
+                                                                <% if (product.roast) { %>
+                                                                    <p class="card-text">Roast: <%= product.roast %>
+                                                                    </p>
+                                                                    <% } %>
+                                                                        <a href="/coffeeshops/<%= coffeeshop._id %>/product/<%= product._id %>"
+                                                                            class="btn btn-primary stretched-link">View Product</a>
+                                                    </div>
+                                                </div>
+
+                                                <% if ((index + 1) % 3===0 || index===coffeeshop.product.length - 1) {
+                                                    %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <p>No products available for this coffee shop.</p>
+                                                <% } %>
+                    </div>
+
+                    <!-- Show navigation buttons only if there are more than 3 products -->
+                    <% if (coffeeshop.product.length> 3) { %>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <% } %>
+                </div>
+            </div>
+        </div>
 
     <script>
         const mapToken = '<%-process.env.MAPBOX_TOKEN %>';
         const coffeeshop = <%- JSON.stringify(coffeeshop) %>;
+        console.log(coffeeshop);
+        console.log(coffeeshop.product);
     </script>
     <script src="/javascripts/showPage.js"></script>

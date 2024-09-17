@@ -1,8 +1,15 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
-        <h1 class="text-center">
-            Edit Coffee Shop
-        </h1>
+        <div class="col-md-6 offset-md-3">
+            <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-link">
+                <i class="fas fa-arrow-left"></i> Back to <%= coffeeshop.title %>
+            </a>
+        </div>
+        <div class="text-center">
+            <h1>
+                Edit Coffee Shop
+            </h1>
+        </div>
         <div class="col-md-6 offset-md-3">
             <form action="/coffeeshops/<%= coffeeshop._id %>?_method=PUT" method="post" class="needs-validation"
                 novalidate enctype="multipart/form-data">
@@ -40,7 +47,7 @@
                 <div class="mb-3">
                     <% coffeeshop.image.forEach(function(img, i) { %>
                         <% if(img.filename !=='' ) { %>
-                            <img src="<%= img.url %>" alt="" class="img-thumbnail">
+                            <img src="<%= img.url %>" alt="" class="img-thumbnail" style="height: 200px; width: 200px;">
                             <div class="form-check-inline">
                                 <input type="checkbox" id="image-<%=i%>" name="deleteImages[]"
                                     value="<%= img.filename %>">
@@ -52,8 +59,8 @@
 
                 <div class="mb-3">
                     <button class="btn btn-primary">Update Coffee Shop</button>
+                    <a href="/coffeeshops/<%= coffeeshop._id %>" class="btn btn-danger text-end">Cancel</a>
                 </div>
             </form>
-            <a href="/coffeeshops/<%= coffeeshop._id %>">Back to <%= coffeeshop.title %></a>
         </div>
     </div>
